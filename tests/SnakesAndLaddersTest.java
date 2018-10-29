@@ -40,7 +40,8 @@ public class SnakesAndLaddersTest {
     @Test
     public void testTakeTurn() {
         SnakesAndLadders instance = new SnakesAndLadders();
-        boolean doubleRoll = instance.takeTurn(1);
+        @SuppressWarnings("unused")
+		boolean doubleRoll = instance.takeTurn(1);
         int position = instance.getPlayerPosition(1);
         assertNotEquals(1, position);
         position = instance.getPlayerPosition(0);
