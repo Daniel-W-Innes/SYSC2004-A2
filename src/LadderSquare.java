@@ -10,6 +10,5 @@ public class LadderSquare extends SorLSquare {
 	}
 	public String toString() {
 		return null;
-	}
-	
+	}		
 }
