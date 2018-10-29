@@ -4,7 +4,7 @@ public class SnLSquare {
 	private int number;
 
 	public SnLSquare(int number) {
-
+		this.number = number;
 	}
 
 	public int getNumber() {
@@ -12,11 +12,11 @@ public class SnLSquare {
 	}
 
 	public int landOn() {
-		return 0;
+		return number;
 	}
 
 	public String toString() {
-		return null;
+		return Integer.toString(number);
 	}
 
 	public boolean equals(Object o) {
@@ -26,6 +26,6 @@ public class SnLSquare {
 			return false;
 		if (this.getClass() != o.getClass())
 			return false;
-		return (this.getNumber() == ((SorLSquare) o).getNumber());
+		return (this.getNumber() == ((SnLSquare) o).getNumber());
 	}
 }

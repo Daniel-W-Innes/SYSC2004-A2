@@ -1,22 +1,26 @@
 
 public class SorLSquare extends SnLSquare {
 
-	private int EndSquare;
+	private int endSquare;
 
 	public SorLSquare(int number, int endSquare) {
 		super(number);
+		if (number == endSquare) {
+			throw new IllegalArgumentException();
+		}
+		this.endSquare = endSquare;
 	}
 
 	public int getEndSquare() {
-		return EndSquare;
+		return endSquare;
 	}
 
 	public int landOn() {
-		return 0;
+		return endSquare;
 	}
 
 	public String toString() {
-		return null;
+		return getNumber() + ":" + endSquare;
 	}
 
 	public boolean equals(Object o) {

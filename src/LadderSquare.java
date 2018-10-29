@@ -1,14 +1,18 @@
 
 public class LadderSquare extends SorLSquare {
 
-	public LadderSquare(int number, int endSquare){
-		super(number,endSquare);
+	public LadderSquare(int number, int endSquare) {
+		super(number, endSquare);
+		if (number >= endSquare) {
+			throw new IllegalArgumentException();
+		}
 	}
-	
+
 	public int landOn() {
-		return 0;
+		return getEndSquare();
 	}
+
 	public String toString() {
-		return null;
-	}		
+		return getNumber() + "+" + getEndSquare();
+	}
 }

@@ -1,4 +1,3 @@
-import java.awt.Point;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
@@ -26,7 +25,8 @@ public class SorLSquareTest {
     @Test
     public void testBadConstructor() {
         try {
-            SorLSquare instance = new SorLSquare(33,33);
+            @SuppressWarnings("unused")
+			SorLSquare instance = new SorLSquare(33,33);
             fail();
         } catch (IllegalArgumentException e) { }
     }

@@ -1,4 +1,3 @@
-import java.awt.Point;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
@@ -26,7 +25,8 @@ public class LadderSquareTest {
     @Test
     public void testBadConstructor() {
         try {
-            LadderSquare instance = new LadderSquare(33,12);
+            @SuppressWarnings("unused")
+			LadderSquare instance = new LadderSquare(33,12);
             fail();
         } catch (IllegalArgumentException e) { }
     }

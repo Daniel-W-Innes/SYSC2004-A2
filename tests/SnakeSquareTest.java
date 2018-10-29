@@ -1,4 +1,3 @@
-import java.awt.Point;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
@@ -27,7 +26,8 @@ public class SnakeSquareTest {
     @Test
     public void testBadConstructor() {
         try {
-            SnakeSquare instance = new SnakeSquare(33,44);
+            @SuppressWarnings("unused")
+			SnakeSquare instance = new SnakeSquare(33,44);
             fail();
         } catch (IllegalArgumentException e) { }
     }
