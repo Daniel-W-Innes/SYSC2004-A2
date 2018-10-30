@@ -46,38 +46,6 @@ public class SnakesAndLadders {
 		}
 	}
 
-	public static void main(String[] args) {
-		int NUM_PLAYERS = 1;
-		SnakesAndLadders sal = new SnakesAndLadders(NUM_PLAYERS);
-		int player = 0;
-		System.out.println(sal.toString());
-		while (sal.getWinner() == -1) {
-			while (sal.takeTurn(player)) {
-				if (sal.isPlayerWinner(player)) {
-					break;
-				}
-			}
-			System.out.println(sal.toStringCurrentPositions());
-			player++;
-			if (player >= NUM_PLAYERS) {
-				player = 0;
-			}
-		}
-		System.out.println("Player " + sal.getWinner() + " wins.");
-	}
-
-	public int getPlayerPosition(int player) {
-		return players[player];
-	}
-
-	public String toStringCurrentPositions() {
-		String string = "";
-		for (int i = 0; i < players.length; ++i) {
-			string += i + ":" + players[i] + " ";
-		}
-		return string;
-	}
-
 	public boolean takeTurn(int player) {
 		int tot = dice.roll();
 		if (players[player] + tot > 100) {
@@ -102,6 +70,10 @@ public class SnakesAndLadders {
 		return -1;
 	}
 
+	public int getPlayerPosition(int player) {
+		return players[player];
+	}
+
 	public String toString() {
 		String string = "";
 		SnLSquare cell;
@@ -122,6 +94,34 @@ public class SnakesAndLadders {
 			}
 		}
 		return string;
+	}
+
+	public String toStringCurrentPositions() {
+		String string = "";
+		for (int i = 0; i < players.length; ++i) {
+			string += i + ":" + players[i] + " ";
+		}
+		return string;
+	}
+
+	public static void main(String[] args) {
+		int NUM_PLAYERS = 100;
+		SnakesAndLadders sal = new SnakesAndLadders(NUM_PLAYERS);
+		int player = 0;
+		System.out.println(sal.toString());
+		while (sal.getWinner() == -1) {
+			while (sal.takeTurn(player)) {
+				if (sal.isPlayerWinner(player)) {
+					break;
+				}
+			}
+			System.out.println(sal.toStringCurrentPositions());
+			player++;
+			if (player >= NUM_PLAYERS) {
+				player = 0;
+			}
+		}
+		System.out.println("Player " + sal.getWinner() + " wins.");
 	}
 
 }

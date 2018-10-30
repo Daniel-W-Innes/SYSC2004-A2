@@ -15,5 +15,5 @@ public class SnakeSquare extends SorLSquare{
 	public String toString() {
 		return getNumber() + "-" + getEndSquare();
 	}
-	
+
 }
