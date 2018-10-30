@@ -31,9 +31,9 @@ public class SnakesAndLadders {
 				+ "| 91 | 92 | 93-73 | 94 | 95-75 | 96 | 97 | 98 | 99-78 | 100";
 		boardStr = boardStr.replaceAll("\\s+", "").substring(1);
 		String[] cellsStr = boardStr.split("[|]");
-		int i = 0;
-		for (String cellStr : cellsStr) {
-			i++;
+		String cellStr;
+		for (int i = 0; i < cellsStr.length; ++i) {
+			cellStr = cellsStr[i];
 			if (cellStr.contains("+")) {
 				String[] ladder = cellStr.split("[+]");
 				board[i] = new LadderSquare(Integer.parseInt(ladder[0]), Integer.parseInt(ladder[1]));
@@ -47,7 +47,23 @@ public class SnakesAndLadders {
 	}
 
 	public static void main(String[] args) {
-
+		int NUM_PLAYERS = 1;
+		SnakesAndLadders sal = new SnakesAndLadders(NUM_PLAYERS);
+		int player = 0;
+		System.out.println(sal.toString());
+		while (sal.getWinner() == -1) {
+			while (sal.takeTurn(player)) {
+				if (sal.isPlayerWinner(player)) {
+					break;
+				}
+			}
+			System.out.println(sal.toStringCurrentPositions());
+			player++;
+			if (player >= NUM_PLAYERS) {
+				player = 0;
+			}
+		}
+		System.out.println("Player " + sal.getWinner() + " wins.");
 	}
 
 	public int getPlayerPosition(int player) {
@@ -69,6 +85,7 @@ public class SnakesAndLadders {
 		} else {
 			players[player] = board[players[player] + tot].landOn();
 		}
+		System.out.println("Player " + player + " rolled " + tot);
 		return dice.hasDoubles();
 	}
 
@@ -86,14 +103,22 @@ public class SnakesAndLadders {
 	}
 
 	public String toString() {
-		String string = "|";
-		for (SnLSquare cell : board) {
-			if (cell.getNumber() < cell.landOn()) {
-				string += cell.getNumber() + "+" + cell.landOn();
-			} else if (cell.getNumber() > cell.landOn()) {
-				string += cell.getNumber() + "-" + cell.landOn();
-			} else {
-				string += cell.getNumber();
+		String string = "";
+		SnLSquare cell;
+		int numLine = (int) Math.sqrt(board.length);
+		for (int i = 0; i < board.length; ++i) {
+			cell = board[i];
+			if (cell != null) {
+				if (cell.getNumber() < cell.landOn()) {
+					string += "|" + cell.getNumber() + "+" + cell.landOn();
+				} else if (cell.getNumber() > cell.landOn()) {
+					string += "|" + cell.getNumber() + "-" + cell.landOn();
+				} else {
+					string += "|" + cell.getNumber();
+				}
+				if (i % numLine == 0 && i != 0) {
+					string += "\n";
+				}
 			}
 		}
 		return string;
