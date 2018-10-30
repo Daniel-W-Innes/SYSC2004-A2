@@ -18,7 +18,7 @@ public class SnakesAndLadders {
 		for (int i = 0; i < NUM_PLAYERS; ++i) {
 			players[i] = 1;
 		}
-		board = new SnLSquare[101];
+		board = new SnLSquare[NUM_SQUARES];
 		String boardStr = "| 1 | 2 | 3 | 4+14 | 5 | 6 | 7 | 8 | 9+31 | 10"
 				+ "| 11 | 12 | 13 | 14 | 15 | 16 | 17-7 | 18 | 19 | 20+38"
 				+ "| 21 | 22 | 23 | 24 | 25 | 26 | 27 | 28+84 | 29 | 30"
@@ -29,7 +29,13 @@ public class SnakesAndLadders {
 				+ "| 71+91 | 72 | 73 | 74 | 75 | 76 | 77 | 78 | 79 | 80"
 				+ "| 81 | 82 | 83 | 84 | 85 | 86 | 87-24 | 88 | 89 | 90"
 				+ "| 91 | 92 | 93-73 | 94 | 95-75 | 96 | 97 | 98 | 99-78 | 100";
-		boardStr = boardStr.replaceAll("\\s+", "").substring(1);
+		boardStr = boardStr.replaceAll("\\s+", "");
+		if (boardStr.startsWith("|")) {
+			boardStr = boardStr.substring(1);
+		}
+		if (boardStr.endsWith("|")) {
+			boardStr = boardStr.substring(0,boardStr.length()-1);
+		}
 		String[] cellsStr = boardStr.split("[|]");
 		String cellStr;
 		for (int i = 0; i < cellsStr.length; ++i) {
@@ -44,14 +50,17 @@ public class SnakesAndLadders {
 				board[i] = new SnLSquare(Integer.parseInt(cellStr));
 			}
 		}
+		for(int i = cellsStr.length; i<NUM_SQUARES;++i) {
+			board[i] = new SnLSquare(i);
+		}
 	}
 
 	public boolean takeTurn(int player) {
 		int tot = dice.roll();
-		if (players[player] + tot > 100) {
-			players[player] = board[100 - (players[player] + tot - 100)].landOn();
+		if (players[player] + tot > board.length) {
+			players[player] = board[board.length - (players[player] + tot - board.length)-1].landOn();
 		} else {
-			players[player] = board[players[player] + tot].landOn();
+			players[player] = board[players[player] +  tot-1].landOn();
 		}
 		System.out.println("Player " + player + " rolled " + tot);
 		return dice.hasDoubles();
@@ -80,17 +89,15 @@ public class SnakesAndLadders {
 		int numLine = (int) Math.sqrt(board.length);
 		for (int i = 0; i < board.length; ++i) {
 			cell = board[i];
-			if (cell != null) {
-				if (cell.getNumber() < cell.landOn()) {
-					string += "|" + cell.getNumber() + "+" + cell.landOn();
-				} else if (cell.getNumber() > cell.landOn()) {
-					string += "|" + cell.getNumber() + "-" + cell.landOn();
-				} else {
-					string += "|" + cell.getNumber();
-				}
-				if (i % numLine == 0 && i != 0) {
-					string += "\n";
-				}
+			if (cell.getNumber() < cell.landOn()) {
+				string += "|" + cell.getNumber() + "+" + cell.landOn();
+			} else if (cell.getNumber() > cell.landOn()) {
+				string += "|" + cell.getNumber() + "-" + cell.landOn();
+			} else {
+				string += "|" + cell.getNumber();
+			}
+			if (i % numLine == 0 && i != 0) {
+				string += "\n";
 			}
 		}
 		return string;
@@ -105,23 +112,25 @@ public class SnakesAndLadders {
 	}
 
 	public static void main(String[] args) {
-		int NUM_PLAYERS = 100;
-		SnakesAndLadders sal = new SnakesAndLadders(NUM_PLAYERS);
-		int player = 0;
-		System.out.println(sal.toString());
-		while (sal.getWinner() == -1) {
-			while (sal.takeTurn(player)) {
-				if (sal.isPlayerWinner(player)) {
-					break;
+		for (int i = 0; i < 1000; ++i) {
+			int NUM_PLAYERS = 100;
+			SnakesAndLadders sal = new SnakesAndLadders(NUM_PLAYERS);
+			int player = 0;
+			System.out.println(sal.toString());
+			while (sal.getWinner() == -1) {
+				while (sal.takeTurn(player)) {
+					if (sal.isPlayerWinner(player)) {
+						break;
+					}
+				}
+				System.out.println(sal.toStringCurrentPositions());
+				player++;
+				if (player >= NUM_PLAYERS) {
+					player = 0;
 				}
 			}
-			System.out.println(sal.toStringCurrentPositions());
-			player++;
-			if (player >= NUM_PLAYERS) {
-				player = 0;
-			}
+			System.out.println("Player " + sal.getWinner() + " wins.");
 		}
-		System.out.println("Player " + sal.getWinner() + " wins.");
 	}
 
 }

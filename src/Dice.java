@@ -80,11 +80,19 @@ public class Dice {
 	}
 
 	public boolean hasDoubles() {
-		Set<Integer> set = new HashSet<Integer>();
-		for (int value : values) {
-			if (set.contains(value))
+		if(values.length == 2) {
+			if(values[0] == values[1]) {
 				return true;
-			set.add(value);
+			} else {
+				return false;
+			}
+		} else {
+			Set<Integer> set = new HashSet<Integer>();
+			for (int i = 0; i < values.length; ++i) {
+				if (set.contains(values[i]))
+					return true;
+				set.add(values[i]);
+			}
 		}
 		return false;
 	}
