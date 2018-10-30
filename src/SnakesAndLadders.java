@@ -14,6 +14,7 @@ public class SnakesAndLadders {
 	public SnakesAndLadders(int nPlayers) {
 		NUM_PLAYERS = nPlayers;
 		players = new int[NUM_PLAYERS];
+		dice = new Dice();
 		for (int i = 0; i < NUM_PLAYERS; ++i) {
 			players[i] = 1;
 		}
@@ -28,16 +29,16 @@ public class SnakesAndLadders {
 				+ "| 71+91 | 72 | 73 | 74 | 75 | 76 | 77 | 78 | 79 | 80"
 				+ "| 81 | 82 | 83 | 84 | 85 | 86 | 87-24 | 88 | 89 | 90"
 				+ "| 91 | 92 | 93-73 | 94 | 95-75 | 96 | 97 | 98 | 99-78 | 100";
-		boardStr.replaceAll(" ", "");
-		String[] cellsStr = boardStr.split("|");
+		boardStr = boardStr.replaceAll("\\s+", "").substring(1);
+		String[] cellsStr = boardStr.split("[|]");
 		int i = 0;
 		for (String cellStr : cellsStr) {
 			i++;
 			if (cellStr.contains("+")) {
-				String[] ladder = cellStr.split("+");
+				String[] ladder = cellStr.split("[+]");
 				board[i] = new LadderSquare(Integer.parseInt(ladder[0]), Integer.parseInt(ladder[1]));
 			} else if(cellStr.contains("-")){
-				String[] snake = cellStr.split("-");
+				String[] snake = cellStr.split("[-]");
 				board[i] = new SnakeSquare(Integer.parseInt(snake[0]), Integer.parseInt(snake[1]));
 			} else {
 				board[i] = new SnLSquare(Integer.parseInt(cellStr));
@@ -46,33 +47,58 @@ public class SnakesAndLadders {
 	}
 
 	public static void main(String[] args) {
-		// TODO Auto-generated method stub
-
+		
 	}
 
-	public int getPlayerPosition(int i) {
-		// TODO Auto-generated method stub
-		return 0;
+	public int getPlayerPosition(int player) {
+		return players[player];
 	}
 
 	public String toStringCurrentPositions() {
-		// TODO Auto-generated method stub
-		return null;
+		String string = "";
+		for(int i = 0; i<players.length;++i) {
+			if(players[i]==100) {
+				string += i + ":" + players[i];
+			}
+		}
+		return string;
 	}
 
-	public boolean takeTurn(int i) {
-		// TODO Auto-generated method stub
-		return false;
+	public boolean takeTurn(int player) {
+		int tot = dice.roll();
+		if (players[player] + tot > 100) {
+			players[player]  = 100 - (players[player] + tot - 100);
+		} else {
+			players[player] += tot;
+		}
+		return dice.hasDoubles();
 	}
 
-	public boolean isPlayerWinner(int i) {
-		// TODO Auto-generated method stub
-		return false;
+	public boolean isPlayerWinner(int player) {
+		return players[player]==100;
 	}
 
 	public int getWinner() {
-		// TODO Auto-generated method stub
-		return 0;
+		for(int i = 0; i<players.length;++i) {
+			if(players[i]==100) {
+				return i;
+			}
+		}
+		return -1;
+	}
+	
+	public String toString() {
+		String string = "|";
+		for(SnLSquare cell : board) {
+			if (cell.getNumber() < cell.landOn()) {
+				string += cell.getNumber() + "+" + cell.landOn();
+			} else if(cell.getNumber() > cell.landOn()) {
+				string += cell.getNumber() + "-" + cell.landOn();
+			} else {
+				string += cell.getNumber();
+			}
+		}
+		return string;
 	}
 
 }
