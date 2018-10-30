@@ -37,7 +37,7 @@ public class SnakesAndLadders {
 			if (cellStr.contains("+")) {
 				String[] ladder = cellStr.split("[+]");
 				board[i] = new LadderSquare(Integer.parseInt(ladder[0]), Integer.parseInt(ladder[1]));
-			} else if(cellStr.contains("-")){
+			} else if (cellStr.contains("-")) {
 				String[] snake = cellStr.split("[-]");
 				board[i] = new SnakeSquare(Integer.parseInt(snake[0]), Integer.parseInt(snake[1]));
 			} else {
@@ -47,7 +47,7 @@ public class SnakesAndLadders {
 	}
 
 	public static void main(String[] args) {
-		
+
 	}
 
 	public int getPlayerPosition(int player) {
@@ -56,10 +56,8 @@ public class SnakesAndLadders {
 
 	public String toStringCurrentPositions() {
 		String string = "";
-		for(int i = 0; i<players.length;++i) {
-			if(players[i]==100) {
-				string += i + ":" + players[i];
-			}
+		for (int i = 0; i < players.length; ++i) {
+			string += i + ":" + players[i] + " ";
 		}
 		return string;
 	}
@@ -67,32 +65,32 @@ public class SnakesAndLadders {
 	public boolean takeTurn(int player) {
 		int tot = dice.roll();
 		if (players[player] + tot > 100) {
-			players[player]  = 100 - (players[player] + tot - 100);
+			players[player] = board[100 - (players[player] + tot - 100)].landOn();
 		} else {
-			players[player] += tot;
+			players[player] = board[players[player] + tot].landOn();
 		}
 		return dice.hasDoubles();
 	}
 
 	public boolean isPlayerWinner(int player) {
-		return players[player]==100;
+		return players[player] == 100;
 	}
 
 	public int getWinner() {
-		for(int i = 0; i<players.length;++i) {
-			if(players[i]==100) {
+		for (int i = 0; i < players.length; ++i) {
+			if (players[i] == 100) {
 				return i;
 			}
 		}
 		return -1;
 	}
-	
+
 	public String toString() {
 		String string = "|";
-		for(SnLSquare cell : board) {
+		for (SnLSquare cell : board) {
 			if (cell.getNumber() < cell.landOn()) {
 				string += cell.getNumber() + "+" + cell.landOn();
-			} else if(cell.getNumber() > cell.landOn()) {
+			} else if (cell.getNumber() > cell.landOn()) {
 				string += cell.getNumber() + "-" + cell.landOn();
 			} else {
 				string += cell.getNumber();
